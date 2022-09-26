@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # upgrading to spark core dependencies is critical
+      - dependency-name: org.apache.spark:*
+      - dependency-name: org.scala-lang:*
+      # ignoring maven plugins
+      - dependency-name: org.apache.maven.plugins:*

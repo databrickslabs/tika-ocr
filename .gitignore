@@ -1,0 +1,7 @@
+*.iml
+.idea
+target
+dependency-reduced-pom.xml
+.coverage
+build
+__pycache__
