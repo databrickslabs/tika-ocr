@@ -1,0 +1,19 @@
+MIME-Version: 1.0
+Date: Thu, 25 Aug 2022 10:04:07 -0700
+Message-ID: <CAN+Vg3TcVR7ZqfBoMADcYxROmDxnwfBDmGLuwst0ZpPmo_K_XA@mail.gmail.com>
+Subject: test
+From: Antoine Amend <antoine.amend@databricks.com>
+To: Antoine Amend <antoine.amend@databricks.com>
+Content-Type: multipart/alternative; boundary="00000000000016ba2c05e713c939"
+
+--00000000000016ba2c05e713c939
+Content-Type: text/plain; charset="UTF-8"
+
+hello tika
+
+--00000000000016ba2c05e713c939
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr">hello tika</div>
+
+--00000000000016ba2c05e713c939--
