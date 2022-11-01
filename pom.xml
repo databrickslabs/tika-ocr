@@ -6,7 +6,7 @@
 
     <groupId>com.databricks.labs</groupId>
     <artifactId>tika-ocr</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.2-SNAPSHOT</version>
     <name>tika-ocr</name>
 
     <url>https://github.com/databrickslabs/tika-ocr</url>
