@@ -4,7 +4,7 @@
 
     <groupId>com.databricks.labs</groupId>
     <artifactId>tika-ocr</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
 
     <url>https://github.com/databrickslabs/tika-ocr</url>
     <description>Using Apache tika and tesseract to extact text from any document</description>
@@ -37,7 +37,7 @@
     <scm>
         <url>https://github.com/databrickslabs/tika-ocr</url>
         <connection>scm:git:git@github.com:databrickslabs/tika-ocr.git</connection>
-        <tag>tika-ocr-0.1.0</tag>
+        <tag>tika-ocr</tag>
     </scm>
 
     <distributionManagement>
