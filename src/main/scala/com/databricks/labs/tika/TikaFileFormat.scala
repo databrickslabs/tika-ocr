@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileStatus, Path}
 import org.apache.hadoop.mapreduce.Job
+import org.apache.spark.SparkException
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.util.DateTimeUtils
@@ -31,7 +32,7 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
                              job: Job,
                              options: Map[String, String],
                              dataSchema: StructType): OutputWriterFactory = {
-    throw QueryExecutionErrors.writeUnsupportedForBinaryFileDataSourceError()
+    throw new UnsupportedOperationException("Write is not supported for tika file data source")
   }
 
   // Files are read as binary and need to be read as a whole (i.e. not split against multiple executors)
@@ -65,7 +66,11 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
       val path = new Path(new URI(file.filePath))
       val fs = path.getFileSystem(hadoopConf_B.value.value)
       val status = fs.getFileStatus(path)
-      if (status.getLen > maxLength) throw QueryExecutionErrors.fileLengthExceedsMaxLengthError(status, maxLength)
+      if (status.getLen > maxLength) {
+        throw new SparkException(
+          s"The length of ${status.getPath} is ${status.getLen}, " +
+            s"which exceeds the max length allowed: $maxLength.")
+      }
       val fileName = status.getPath.toString
       val fileLength = status.getLen
       val fileTime = DateTimeUtils.millisToMicros(status.getModificationTime)

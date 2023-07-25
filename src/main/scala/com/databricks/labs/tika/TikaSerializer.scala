@@ -75,7 +75,7 @@ object TikaSerializer {
         case COL_CONTENT => writer.write(i, processedDocument.fileContent)
         case COL_TYPE => writer.write(i, UTF8String.fromString(processedDocument.tikaContent.contentType))
         case COL_METADATA => writeMetadata(writer, i, processedDocument.tikaContent.metadata)
-        case other => throw QueryExecutionErrors.unsupportedFieldNameError(other)
+        case other => throw new RuntimeException(s"Unsupported field name: ${other}")
       }
     })
 
