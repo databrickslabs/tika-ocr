@@ -3,7 +3,6 @@ package com.databricks.labs.tika
 import org.apache.tika.exception.TikaException
 import org.apache.tika.io.TikaInputStream
 import org.apache.tika.metadata.{Metadata, TikaCoreProperties}
-import org.apache.tika.mime.MediaType
 import org.apache.tika.parser.microsoft.OfficeParserConfig
 import org.apache.tika.parser.ocr.TesseractOCRConfig
 import org.apache.tika.parser.pdf.PDFParserConfig
@@ -18,7 +17,7 @@ object TikaExtractor {
   @throws[IOException]
   @throws[SAXException]
   @throws[TikaException]
-  def extract(stream: TikaInputStream, filename: String): TikaContent = {
+  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1): TikaContent = {
 
     // Configure each parser if required
     val pdfConfig = new PDFParserConfig
@@ -26,9 +25,7 @@ object TikaExtractor {
     val tesseractConfig = new TesseractOCRConfig
     val parseContext = new ParseContext
 
-    // write limit of -1 means unlimited.
-    // If not set, default is 100000 characters, making process to file for large documents
-    val handler = new BodyContentHandler(-1)
+    val handler = new BodyContentHandler(writeLimit)
     val parser = new AutoDetectParser()
     val metadata = new Metadata()
 
