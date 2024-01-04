@@ -96,4 +96,16 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     spark.conf.unset("spark.sql.sources.binaryFile.maxLength")
   }
 
+  it should "be able to process large files" in {
+    val path = Paths.get("src", "test", "resources", "text").toAbsolutePath.toString
+    assertThrows[SparkException] {
+      spark.read.format("tika").option(TIKA_MAX_BUFFER_OPTION, "hello, world").load(path).show()
+    }
+    assertThrows[SparkException] {
+      spark.read.format("tika").option(TIKA_MAX_BUFFER_OPTION, 1).load(path).show()
+    }
+    val df = spark.read.format("tika").option(TIKA_MAX_BUFFER_OPTION, -1).load(path)
+    df.show()
+  }
+
 }
