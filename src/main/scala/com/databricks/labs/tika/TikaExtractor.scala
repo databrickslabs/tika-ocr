@@ -26,8 +26,10 @@ object TikaExtractor {
     val tesseractConfig = new TesseractOCRConfig
     val parseContext = new ParseContext
 
+    // write limit of -1 means unlimited.
+    // If not set, default is 100000 characters, making process to file for large documents
+    val handler = new BodyContentHandler(-1)
     val parser = new AutoDetectParser()
-    val handler = new BodyContentHandler()
     val metadata = new Metadata()
 
     // To work, we need Tesseract library install natively
