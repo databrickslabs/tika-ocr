@@ -43,7 +43,7 @@ mvn release:perform
 
 ## Using the Project
 
-Add `com.databricks.labs:tika-ocr:0.2` maven dependency to your databricks runtime.
+Add `com.databricks.labs:tika-ocr:0.1.4` maven dependency to your databricks runtime.
 Alternatively, compile this project with maven profile `shaded` enabled to generate an uber jar that you upload to 
 your databricks runtime. You can now read any file, extracting text content from any file format.
 
