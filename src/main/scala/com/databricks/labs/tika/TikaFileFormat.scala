@@ -73,7 +73,7 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
     file: PartitionedFile => {
 
       // Retrieve file information
-      val path = new Path(new URI(file.filePath))
+      val path = new Path(file.filePath.toUri)
       val fs = path.getFileSystem(hadoopConf_B.value.value)
       val status = fs.getFileStatus(path)
       if (status.getLen > maxLength) {

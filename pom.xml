@@ -4,7 +4,7 @@
 
     <groupId>com.databricks.labs</groupId>
     <artifactId>tika-ocr</artifactId>
-    <version>0.1.4-SNAPSHOT</version>
+    <version>0.1.5-SNAPSHOT</version>
     <name>tika-ocr</name>
 
     <url>https://github.com/databrickslabs/tika-ocr</url>
@@ -55,9 +55,9 @@
     <properties>
         <minimum.coverage>80</minimum.coverage>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.version>2.12.14</scala.version>
+        <scala.version>2.12.15</scala.version>
         <scala.binary.version>2.12</scala.binary.version>
-        <spark.version>3.3.2</spark.version>
+        <spark.version>3.5.0</spark.version>
         <java.version>11</java.version>
     </properties>
 
