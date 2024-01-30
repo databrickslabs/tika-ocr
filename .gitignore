@@ -6,3 +6,5 @@ dependency-reduced-pom.xml
 build
 __pycache__
 .fleet
+
+databricks.conf
