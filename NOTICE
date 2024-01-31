@@ -1,25 +1,6 @@
-tjc-excelsior
+tika-ocr-inputformat
 
-Copyright (2024) TJC L.P.
+Copyright (2022) Databricks, Inc.
 
 
 This Software includes software developed at Databricks (https://www.databricks.com/) and its use is subject to the included LICENSE file.
-Certain software has been modified or added by TJC L.P. (https://tjclp.com/) ("Modifications and Additions").
-
-MODIFICATIONS AND ADDITIONS ARE PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-In accordance the with the LICENSE, TJC L.P. provides documentation of source code modification below.
-
-MODIFICATIONS
-------------------------------------------------------------------------------------------------------------------------
-
-2024-01-31: https://github.com/TJC-LP/tjc-excelsior/pull/1
-Notes:
-- Update pom.xml for Databricks Runtime 14.2 compatibility
-- Upgrade PatitionedFile syntax to leverage Spark version 3.5.0 changes
-Files Modified:
-- .gitignore
-- pom.xml
-- src/main/scala/com/databricks/labs/tika/TikaFileFormat.scala
