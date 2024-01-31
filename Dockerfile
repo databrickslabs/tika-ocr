@@ -57,7 +57,7 @@ COPY target /app/target
 EXPOSE 4040
 
 # Optional: Run Maven dependency resolution automatically when the image is built
-# RUN mvn dependency:resolve
+RUN mvn dependency:resolve
 
 # Optional: Run Maven package to compile the project when the image is built
 CMD ["mvn", "-Pshaded", "package"]

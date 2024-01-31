@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  tjc-excelsior:
+    image: tjc-excelsior:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./target:/app/target
+    ports:
+      - "4040:4040"
