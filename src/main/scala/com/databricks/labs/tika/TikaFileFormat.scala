@@ -1,6 +1,6 @@
 package com.databricks.labs.tika
 
-import org.apache.commons.io.IOUtils
+import com.google.common.io.{ByteStreams, Closeables}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileStatus, Path}
 import org.apache.hadoop.mapreduce.Job
@@ -14,8 +14,6 @@ import org.apache.spark.sql.types._
 import org.apache.spark.util.SerializableConfiguration
 import org.apache.tika.io.TikaInputStream
 
-import java.io.ByteArrayInputStream
-import java.net.URI
 import scala.util.{Failure, Success, Try}
 
 class TikaFileFormat extends FileFormat with DataSourceRegister {
@@ -73,7 +71,7 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
     file: PartitionedFile => {
 
       // Retrieve file information
-      val path = new Path(new URI(file.filePath))
+      val path = file.toPath
       val fs = path.getFileSystem(hadoopConf_B.value.value)
       val status = fs.getFileStatus(path)
       if (status.getLen > maxLength) {
@@ -91,8 +89,8 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
       try {
 
         // Fully read file content as a ByteArray
-        val fileContent = IOUtils.toByteArray(inputStream)
-        val tikaInputStream = TikaInputStream.get(new ByteArrayInputStream(fileContent))
+        val fileContent = ByteStreams.toByteArray(inputStream)
+        val tikaInputStream = TikaInputStream.get(fileContent)
 
         // Extract text from binary using Tika
         val tikaContent = TikaExtractor.extract(tikaInputStream, fileName, bufferSize)
@@ -106,7 +104,7 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
 
       } finally {
 
-        IOUtils.close(inputStream)
+        Closeables.close(inputStream, true)
 
       }
     }
