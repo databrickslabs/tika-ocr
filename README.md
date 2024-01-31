@@ -1,4 +1,4 @@
-# tjc-excelsior
+# tika-ocr-inputformat
 
 **Digitization of documents with Tika on Databricks** : *The volume of available data is growing by the second. 
 About [64 zettabytes](https://www.wsj.com/articles/how-to-understand-the-data-explosion-11638979214) was created 
@@ -11,31 +11,44 @@ Services makes it possible for bank compliance officers, insurance underwriting 
 latest technologies in optical character recognition (OCR) and natural language processing (NLP) in order to transform 
 any financial document, in any format, into valuable data assets. The Apache Tika toolkit detects and extracts 
 metadata and text from over a thousand different file types (such as PPT, XLS, and PDF). Combined with 
-[Tesseract](https://en.wikipedia.org/wiki/Tesseract_(software)), the most commonly used OCR technology, there is 
+[Tesseract](https://en.wikipedia.org/wiki/Tesseract_(software), the most commonly used OCR technology, there is 
 literally no limit to what files we can ingest, store and exploit for analytics / operation purpose.*
 
 ## Project Support
-This project is an extension of [databrickslabds/tika-ocr](https://github.com/databrickslabs/tika-ocr). [TJC, L.P.](https://tjclp.com/) is a customer of but not affiliated with Databricks. Please note documentation of modifications made to the source code in the `NOTICE` file. Contributions are not supported at this time, though we plan to add support in the future.
+Please note that all projects in the /databrickslabs github account are provided for your exploration only, 
+and are not formally supported by Databricks with Service Level Agreements (SLAs). 
+They are provided AS-IS and we do not make any guarantees of any kind. 
+Please do not submit a support ticket relating to any issues arising from the use of these projects.
+
+Any issues discovered through the use of this project should be filed as GitHub Issues on the Repo. 
+They will be reviewed as time permits, but there are no formal SLAs for support.
 
 ## Building the Project
-This project uses Docker for builds in order to closely replicate Databricks Runtime 14.2 with `tesseract-ocr` installed. At this time, we do not support releases to Maven.
 
-To build the environment, run
-```bash
-docker compose build
+```
+mvn clean install
 ```
 
-To build an uber jar to the `target` directory, run 
-```bash
-docker compose up
+## Deploying / Installing the Project
+
 ```
+mvn release:prepare
+```
+
+## Releasing the Project
+
+```
+mvn release:perform
+```
+
 ## Using the Project
 
-Using the commands above, this project is compiled with maven profile `shaded` enabled to generate an uber jar that you can upload to 
-your databricks runtime. At this time, we only support Databricks Runtime 14.2+. For Databricks Runtime 12.2 LTS and below support, please see [databrickslabds/tika-ocr](https://github.com/databrickslabs/tika-ocr). You can now read any file, extracting text content from any file format.
+Add `com.databricks.labs:tika-ocr:0.1.4` maven dependency to your databricks runtime.
+Alternatively, compile this project with maven profile `shaded` enabled to generate an uber jar that you upload to 
+your databricks runtime. You can now read any file, extracting text content from any file format.
 
 ```python
-spark.read.format("tika").load(path_to_any_file)
+spark.read.format('tika').load(path_to_any_file)
 ```
 
 |                path|length|    modificationTime|             content|         contentType|         contentText|     contentMetadata|
