@@ -68,6 +68,15 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
         "] must be passed as an integer. " + exception.getMessage)
     }
 
+    // Tesseract times out after 120 seconds by default, but we may want to modify this.
+    val timeout = Try {
+      options.getOrElse(TESSERACT_TIMEOUT_SECONDS_OPTION, "120").toInt
+    } match {
+      case Success(value) => value
+      case Failure(exception) => throw new SparkException("Option [" + TESSERACT_TIMEOUT_SECONDS_OPTION +
+        "] must be passed as an integer. " + exception.getMessage)
+    }
+
     file: PartitionedFile => {
 
       // Retrieve file information
@@ -93,7 +102,7 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
         val tikaInputStream = TikaInputStream.get(fileContent)
 
         // Extract text from binary using Tika
-        val tikaContent = TikaExtractor.extract(tikaInputStream, fileName, bufferSize)
+        val tikaContent = TikaExtractor.extract(tikaInputStream, fileName, bufferSize, timeout)
 
         // Write content to a row following schema specs
         // Note: the required schema provided by spark may come in different order than previously defined
