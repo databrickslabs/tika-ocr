@@ -17,12 +17,13 @@ object TikaExtractor {
   @throws[IOException]
   @throws[SAXException]
   @throws[TikaException]
-  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1): TikaContent = {
+  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1, timeout: Int = 120): TikaContent = {
 
     // Configure each parser if required
     val pdfConfig = new PDFParserConfig
     val officeConfig = new OfficeParserConfig
     val tesseractConfig = new TesseractOCRConfig
+    tesseractConfig.setTimeoutSeconds(timeout) // Set the Tesseract OCR
     val parseContext = new ParseContext
 
     val handler = new BodyContentHandler(writeLimit)
