@@ -4,7 +4,7 @@
 
     <groupId>com.databricks.labs</groupId>
     <artifactId>tika-ocr</artifactId>
-    <version>0.1.5</version>
+    <version>0.1.6-SNAPSHOT</version>
     <name>tika-ocr</name>
 
     <url>https://github.com/databrickslabs/tika-ocr</url>
@@ -38,7 +38,7 @@
     <scm>
         <url>https://github.com/databrickslabs/tika-ocr</url>
         <connection>scm:git:git@github.com:databrickslabs/tika-ocr.git</connection>
-        <tag>tika-ocr-0.1.5</tag>
+        <tag>tika-ocr</tag>
     </scm>
 
     <distributionManagement>
