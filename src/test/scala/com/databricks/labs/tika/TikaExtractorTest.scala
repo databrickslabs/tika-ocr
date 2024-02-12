@@ -96,6 +96,15 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     spark.conf.unset("spark.sql.sources.binaryFile.maxLength")
   }
 
+  it should "fail with tesseract timeout" in {
+    val path1 = Paths.get("src", "test", "resources", "text").toAbsolutePath.toString
+    val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
+    assertThrows[SparkException] {
+      val df = spark.read.format("tika").option(TESSERACT_TIMEOUT_SECONDS_OPTION, 0).load(path1, path2)
+      df.show()
+    }
+  }
+
   it should "be able to process large files" in {
     val path = Paths.get("src", "test", "resources", "text").toAbsolutePath.toString
     assertThrows[SparkException] {
