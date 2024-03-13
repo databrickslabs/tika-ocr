@@ -8,6 +8,7 @@ import org.apache.tika.parser.ocr.TesseractOCRConfig
 import org.apache.tika.parser.pdf.PDFParserConfig
 import org.apache.tika.parser.{AutoDetectParser, ParseContext, Parser}
 import org.apache.tika.sax.BodyContentHandler
+import org.apache.poi.util.IOUtils
 
 import java.io.IOException
 import scala.xml.SAXException
@@ -17,7 +18,7 @@ object TikaExtractor {
   @throws[IOException]
   @throws[SAXException]
   @throws[TikaException]
-  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1, timeout: Int = 120): TikaContent = {
+  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1, timeout: Int = 120, byteArrayMaxOverride: Int = 300000000): TikaContent = {
 
     // Configure each parser if required
     val pdfConfig = new PDFParserConfig
@@ -45,6 +46,7 @@ object TikaExtractor {
       val contentType = retrieveContentType(parser, metadata, stream, filename)
 
       // Extract content using the appropriate parsing
+      IOUtils.setByteArrayMaxOverride(byteArrayMaxOverride)
       parser.parse(stream, handler, metadata, parseContext)
       val extractedTextContent = handler.toString
 
