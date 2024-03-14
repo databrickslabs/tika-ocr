@@ -2,8 +2,7 @@ package com.databricks.labs.tika
 
 import org.apache.spark.sql.catalyst.expressions.UnsafeRow
 import org.apache.spark.sql.catalyst.expressions.codegen.{UnsafeArrayWriter, UnsafeRowWriter}
-import org.apache.spark.sql.errors.QueryExecutionErrors
-import org.apache.spark.sql.types.{BinaryType, LongType, MapType, StringType, StructField, StructType, TimestampType}
+import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.Platform
 import org.apache.spark.unsafe.types.UTF8String
 
