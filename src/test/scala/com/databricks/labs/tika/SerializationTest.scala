@@ -3,7 +3,6 @@ package com.databricks.labs.tika
 import org.apache.spark.sql.catalyst.expressions.UnsafeMapData
 import org.apache.spark.sql.catalyst.expressions.codegen.UnsafeRowWriter
 import org.apache.spark.sql.types.{MapType, StringType, StructField, StructType}
-import org.apache.spark.unsafe.types.UTF8String
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

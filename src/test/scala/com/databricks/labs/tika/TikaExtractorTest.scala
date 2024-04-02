@@ -60,7 +60,7 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
     val df = spark.read.format("com.databricks.labs.tika.TikaFileFormat").load(path1, path2)
     val corpus = df.select("contentText").cache
-    corpus.count() shouldBe 15
+    corpus.count() shouldBe 16
     corpus.collect().map(_.getAs[String]("contentText")).foreach(text => {
       text should include regex "[hH]ello"
       text should include regex "[tT]ika"
@@ -78,7 +78,7 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
     val df = spark.read.format("tika").load(path1, path2)
     val corpus = df.select("contentText").cache
-    corpus.count() shouldBe 15
+    corpus.count() shouldBe 16
     corpus.collect().map(_.getAs[String]("contentText")).foreach(text => {
       text should include regex "[hH]ello"
       text should include regex "[tT]ika"
@@ -105,6 +105,34 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     }
   }
 
+  it should "fail with office temp files" in {
+    val path1 = Paths.get("src", "test", "resources", "temp").toAbsolutePath.toString
+    assertThrows[SparkException] {
+      val df1 = spark.read.format("tika").option(TIKA_SKIP_OFFICE_TEMP_FILES, "false").load(path1)
+      df1.show()
+    }
+  }
+
+  it should "be able to skip office temp files" in {
+    val path1 = Paths.get("src", "test", "resources", "temp").toAbsolutePath.toString
+    val df1 = spark.read.format("tika").option(TIKA_SKIP_OFFICE_TEMP_FILES, "true").load(path1)
+    df1.count() shouldBe 0
+  }
+
+  it should "fail with encrypted files" in {
+    val path1 = Paths.get("src", "test", "resources", "encrypted").toAbsolutePath.toString
+    assertThrows[SparkException] {
+      val df1 = spark.read.format("tika").option(TIKA_SKIP_ENCRYPTED_FILES, "false").load(path1)
+      df1.show()
+    }
+  }
+
+  it should "be able to skip office encrypted files" in {
+    val path1 = Paths.get("src", "test", "resources", "encrypted").toAbsolutePath.toString
+    val df1 = spark.read.format("tika").option(TIKA_SKIP_ENCRYPTED_FILES, "true").load(path1)
+    df1.count() shouldBe 0
+  }
+
   it should "be able to process large files" in {
     val path = Paths.get("src", "test", "resources", "text").toAbsolutePath.toString
     assertThrows[SparkException] {
@@ -112,6 +140,9 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     }
     assertThrows[SparkException] {
       spark.read.format("tika").option(TIKA_MAX_BUFFER_OPTION, 1).load(path).show()
+    }
+    assertThrows[SparkException] {
+      spark.read.format("tika").option(POI_IOUTILS_BYTEARRAYMAXOVERRIDE, 0).load(path).show()
     }
     val df = spark.read.format("tika").option(TIKA_MAX_BUFFER_OPTION, -1).load(path)
     df.show()
