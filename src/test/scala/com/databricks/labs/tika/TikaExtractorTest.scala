@@ -60,7 +60,7 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
     val df = spark.read.format("com.databricks.labs.tika.TikaFileFormat").load(path1, path2)
     val corpus = df.select("contentText").cache
-    corpus.count() shouldBe 15
+    corpus.count() shouldBe 16
     corpus.collect().map(_.getAs[String]("contentText")).foreach(text => {
       text should include regex "[hH]ello"
       text should include regex "[tT]ika"
@@ -78,7 +78,7 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
     val df = spark.read.format("tika").load(path1, path2)
     val corpus = df.select("contentText").cache
-    corpus.count() shouldBe 15
+    corpus.count() shouldBe 16
     corpus.collect().map(_.getAs[String]("contentText")).foreach(text => {
       text should include regex "[hH]ello"
       text should include regex "[tT]ika"

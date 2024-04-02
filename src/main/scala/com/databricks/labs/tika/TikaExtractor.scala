@@ -38,15 +38,16 @@ object TikaExtractor {
     parseContext.set(classOf[OfficeParserConfig], officeConfig)
     parseContext.set(classOf[Parser], parser)
 
-    try {
+    // Reset `IOUtils.BYTE_ARRAY_MAX_OVERRIDE` once text is parsed. Default is -1.
+    val configManager = new GenericConfigManager[Int](IOUtils.setByteArrayMaxOverride, -1, byteArrayMaxOverride)
 
+    try configManager {
       // Tika will try at best effort to detect MIME-TYPE by reading some bytes in. With some formats such as .docx,
       // Tika is fooled thinking it is just another zip file. In our experience, it always works better when passing
       // a file than a stream as file name is also leveraged. So let's "fool the fool" by explicitly passing filename
       val contentType = retrieveContentType(parser, metadata, stream, filename)
 
       // Extract content using the appropriate parsing
-      IOUtils.setByteArrayMaxOverride(byteArrayMaxOverride)
       parser.parse(stream, handler, metadata, parseContext)
       val extractedTextContent = handler.toString
 
