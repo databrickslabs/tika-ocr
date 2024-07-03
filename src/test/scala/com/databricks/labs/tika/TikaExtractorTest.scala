@@ -31,6 +31,14 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     content should include regex "[tT]ika"
   }
 
+  it should "extract text from PDF with XML enabled" in {
+    val is = TikaInputStream.get(this.getClass.getResourceAsStream("/text/hello_tika.pdf"))
+    val content = TikaExtractor.extract(is, "hello_tika.pdf", enableXMLOutput = true).content
+    content should include regex "[hH]ello"
+    content should include regex "[tT]ika"
+    content should include regex "html"  // XML adds html content which won't always be included otherwise
+  }
+
   it should "extract content from a variety of files on disk" in {
     val path = Paths.get("src", "test", "resources", "text")
     val allFiles = path.toFile.listFiles()
@@ -40,6 +48,19 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
       val text = document.content
       text should include regex "[hH]ello"
       text should include regex "[tT]ika"
+    })
+  }
+
+  it should "extract content from a variety of files on disk with XML enabled" in {
+    val path = Paths.get("src", "test", "resources", "text")
+    val allFiles = path.toFile.listFiles()
+    allFiles.length should be > 0
+    allFiles.map(file => {
+      val document = TikaExtractor.extract(TikaInputStream.get(new FileInputStream(file)), file.toString, enableXMLOutput = true)
+      val text = document.content
+      text should include regex "[hH]ello"
+      text should include regex "[tT]ika"
+      text should include regex "html"  // XML adds html content which won't always be included otherwise
     })
   }
 
@@ -55,6 +76,19 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     })
   }
 
+  it should "be able to extract content from a variety of images with Tesseract and XML enabled" in {
+    val path = Paths.get("src", "test", "resources", "images")
+    val allFiles = path.toFile.listFiles()
+    allFiles.length should be > 0
+    allFiles.map(file => {
+      val document = TikaExtractor.extract(TikaInputStream.get(new FileInputStream(file)), file.toString, enableXMLOutput = true)
+      val text = document.content
+      text should include regex "[hH]ello"
+      text should include regex "[tT]ika"
+      text should include regex "html"  // XML adds html content which won't always be included otherwise
+    })
+  }
+
   "A Spark input format" should "read files" in {
     val path1 = Paths.get("src", "test", "resources", "text").toAbsolutePath.toString
     val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
@@ -64,6 +98,19 @@ class TikaExtractorTest extends AnyFlatSpec with Matchers {
     corpus.collect().map(_.getAs[String]("contentText")).foreach(text => {
       text should include regex "[hH]ello"
       text should include regex "[tT]ika"
+    })
+  }
+
+  it should "read files with XML enabled" in {
+    val path1 = Paths.get("src", "test", "resources", "text").toAbsolutePath.toString
+    val path2 = Paths.get("src", "test", "resources", "images").toAbsolutePath.toString
+    val df = spark.read.format("com.databricks.labs.tika.TikaFileFormat").option(TIKA_XML_OUTPUT, "true").load(path1, path2)
+    val corpus = df.select("contentText").cache
+    corpus.count() shouldBe 16
+    corpus.collect().map(_.getAs[String]("contentText")).foreach(text => {
+      text should include regex "[hH]ello"
+      text should include regex "[tT]ika"
+      text should include regex "html" // XML adds html content which won't always be included otherwise
     })
   }
 

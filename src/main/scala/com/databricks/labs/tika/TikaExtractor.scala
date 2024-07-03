@@ -7,7 +7,7 @@ import org.apache.tika.parser.microsoft.OfficeParserConfig
 import org.apache.tika.parser.ocr.TesseractOCRConfig
 import org.apache.tika.parser.pdf.PDFParserConfig
 import org.apache.tika.parser.{AutoDetectParser, ParseContext, Parser}
-import org.apache.tika.sax.BodyContentHandler
+import org.apache.tika.sax.{BodyContentHandler, ToXMLContentHandler, WriteOutContentHandler}
 import org.apache.poi.util.IOUtils
 
 import java.io.IOException
@@ -18,7 +18,7 @@ object TikaExtractor {
   @throws[IOException]
   @throws[SAXException]
   @throws[TikaException]
-  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1, timeout: Int = 120, byteArrayMaxOverride: Int = 300000000): TikaContent = {
+  def extract(stream: TikaInputStream, filename: String, writeLimit: Int = -1, timeout: Int = 120, byteArrayMaxOverride: Int = 300000000, enableXMLOutput: Boolean = false): TikaContent = {
 
     // Configure each parser if required
     val pdfConfig = new PDFParserConfig
@@ -27,7 +27,12 @@ object TikaExtractor {
     tesseractConfig.setTimeoutSeconds(timeout) // Set the Tesseract OCR
     val parseContext = new ParseContext
 
-    val handler = new BodyContentHandler(writeLimit)
+    val handler = if (enableXMLOutput) {
+      val xmlHandler = new ToXMLContentHandler()
+      new WriteOutContentHandler(xmlHandler, writeLimit)
+    } else {
+      new BodyContentHandler(writeLimit)
+    }
     val parser = new AutoDetectParser()
     val metadata = new Metadata()
 
