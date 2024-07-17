@@ -68,6 +68,8 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
     val skipOfficeTempFiles = getOption(options, TIKA_SKIP_OFFICE_TEMP_FILES, "true")(_.toBoolean)
     // Optionally skip password protected documents
     val skipEncryptedFiles = getOption(options, TIKA_SKIP_ENCRYPTED_FILES, "true")(_.toBoolean)
+    // Optionally output XML
+    val enableXMLOutput = getOption(options, TIKA_XML_OUTPUT, "false")(_.toBoolean)
 
     file: PartitionedFile => {
 
@@ -94,7 +96,7 @@ class TikaFileFormat extends FileFormat with DataSourceRegister {
         val tikaInputStream = TikaInputStream.get(fileContent)
 
         // Extract text from binary using Tika
-        val tikaContent = TikaExtractor.extract(tikaInputStream, fileName, bufferSize, timeout, byteArrayMaxOverride)
+        val tikaContent = TikaExtractor.extract(tikaInputStream, fileName, bufferSize, timeout, byteArrayMaxOverride, enableXMLOutput)
 
         // Write content to a row following schema specs
         // Note: the required schema provided by spark may come in different order than previously defined

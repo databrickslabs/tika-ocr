@@ -9,6 +9,7 @@ package object tika {
   val TIKA_SKIP_OFFICE_TEMP_FILES = "tika.parser.skipOfficeTempFiles"
   val POI_IOUTILS_BYTEARRAYMAXOVERRIDE = "poi.ioutils.byteArrayMaxOverride"
   val TIKA_SKIP_ENCRYPTED_FILES = "tika.parser.skipEncryptedFiles"
+  val TIKA_XML_OUTPUT = "tika.parser.enableXMLOutput"
 
   private[tika] case class TikaContent(
                                         content: String,
